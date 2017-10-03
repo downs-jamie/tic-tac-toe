@@ -1,8 +1,13 @@
 // GLOBALS
 // init whosTurn as player 1s turn
 var whosTurn = 1;
+var numPlayers = 1
+var name = "Contra";
+var numPlayers = 1;
 var player1Squares = [];
 var player2Squares = [];
+player1Img = '<img src="Y.png"/>';
+player2Img = '<img src="X.png"/>';
 var winningCombos = [
 	['A1','B1','C1'], //ROW 1
 	['A2','B2','C2'], //ROW 2
@@ -14,6 +19,10 @@ var winningCombos = [
 	['A3','B2','C1'] //DIAG 2
 ];
 var gameOver = false;
+var scores = [
+	0,
+	0
+]
 
 // Two things happen when someone clicks.
 // 1. We change the DOM (for the user).
@@ -24,7 +33,7 @@ var markSquare = function(squareClicked){
 	if(squareClicked.innerHTML !== '!'){
 		document.getElementById('message').innerHTML = "Sorry, that square is taken."
 	}else if(whosTurn === 1){
-		squareClicked.innerHTML = 'X';
+		squareClicked.innerHTML = player1Img;
 		whosTurn = 2;
 		player1Squares.push(squareClicked.id);
 		console.log(player1Squares)
@@ -32,32 +41,44 @@ var markSquare = function(squareClicked){
 		if(player1Squares.length >= 3){
 			checkWin(player1Squares,1);
 		}
+		// if((numPlayers == 1) && (!gameOver)){
+		// 	computerMove();
+		// }
 	}else{
-		squareClicked.innerHTML = 'O';
+		squareClicked.innerHTML = player2Img;
 		whosTurn = 1;
 		player2Squares.push(squareClicked.id);
-		document.getElementById('message').innerHTML = ""
-		checkWin(player2Squares,2);
+		document.getElementById('message').innerHTML = "It's X's turn"
+		if(player1Squares.length >= 3)
+			checkWin(player2Squares,2);
 	}
 	// checkWin();
 }
 
-function computerMove(){
-	// find a random square
-	// see if that square is empty
-	// if it is, send it to square
-	// if it's not, keep looking
-	var sqaureFound = false;
-	while(!sqaureFound){
-		rand = Math.floor(Math.random() * 9);
-		console.log(takenSquares)
-		if(takenSquares.indexOf(squares[rand].id) == -1){
-			// square not taken. Take it.
-			sqaureFound = true;
-		}
-	}
-	markSquare(squares[rand]);
-}
+// function computerMove(){
+// 	// find a random square
+// 	// see if that square is empty
+// 	// if it is, send it to square
+// 	// if it's not, keep looking
+// 	var sqaureFound = false;
+// 	while(!sqaureFound){
+// 		rand = Math.floor(Math.random() * 9);
+// 		var isTaken = squares[rand].innerHTML;
+// 		if(isTaken === '-'){
+// 			squaresFound = true;
+// 		}
+
+
+
+
+// 		// console.log(takenSquares)
+// 		// if(takenSquares.indexOf(squares[rand].id) == -1){
+// 		// 	// square not taken. Take it.
+// 		// 	sqaureFound = true;
+// 		// }
+// 	}
+// 	markSquare(squares[rand]);
+// }
 
 function checkWin(currentPlayerSquares,whoJustMarked){
 	// if(squares[0].innerHTML === 'X') and (squares[1].innerHTML === 'X') and (squares[2].innerHTML === 'X'){
@@ -85,9 +106,16 @@ function checkWin(currentPlayerSquares,whoJustMarked){
 }
 
 function endGame(winningCombo,whoJustMarked){
+	if(whoJustMarked === 1){
+		var nameToShow = name;
+		scores[0]++;
+	}else{
+		var nameToShow = 'Player2';
+		scores[1]++;
+	}
 	// WINNER WINNER CHICKEN DINNER
-	console.log(`Player ${whoJustMarked} won the game`);
-	document.getElementById('message').innerHTML = `Congrats to player ${whoJustMarked}!`
+	console.log(`${nameToShow} won the game`);
+	document.getElementById('message').innerHTML = `Congrats to player ${nameToShow}!`
 	gameOver = true;
 	// Loop through the winning combo, and add a class.	
 	for(let i = 0; i < winningCombo.length; i++){
@@ -95,8 +123,21 @@ function endGame(winningCombo,whoJustMarked){
 		console.dir(theSquare);
 		theSquare.className += ' winning-square';
 	}
+	document.getElementById('reset-button').innerHTML ='<button id="reset" class="btn btn-lg btn-success">Reset Game</button>'
+	var resetButton = document.getElementById('reset');
+	resetButton.addEventListener('click', reset);
+	document.getElementsByClassName('player1-score')[0].innerHTML = scores[0];
+	document.getElementsByClassName('player2-score')[0].innerHTML = scores[1];
 }
-
+function reset(){
+	player1Squares = [];
+	player2Squares = [];
+	for(let i = 0; i < squares.length; i++){
+		squares[i].innerHTML = '!';
+		squares[i].className = 'square';
+	}
+	gameOver = false;
+}
 // console.log("Sanity check...")
 // 1. Set up Board --- CHECK
 // 2. User should be be able to click on a button. --- CHECK
@@ -111,6 +152,7 @@ function endGame(winningCombo,whoJustMarked){
 
 // squares is an array with 9 objects. Each object is the JS representation of the HTML tag.
 var squares = document.getElementsByClassName('square');
+// squares[0].innerHTML
 // console.log(squares[0]);
 // console.dir(squares[0]);
 
@@ -134,6 +176,24 @@ for (let i = 0; i < squares.length; i++){
 	});
 }
 
+document.getElementById('one-player').addEventListener('click', function(event){
+	gameOver = false;
+	numPlayers = 1;
+	var nameBox = document.getElementById('player-name');
+	if(nameBox.value !== ""){
+		name = nameBox.value
+	}
+})
+document.getElementById('one-player').addEventListener('click', function(event){
+	gameOver = false;
+	numPlayers = 2;
+	var nameBox = document.getElementById('player-name');
+	if(nameBox.value !== ""){
+		name = nameBox.value
+	}
+})
+
+// computerMove()
 
 // function someoneClicked(event){
 // 		// console.log(this);
@@ -144,3 +204,6 @@ for (let i = 0; i < squares.length; i++){
 // 			markSquare(this);
 // 		}
 // 	}
+
+
+
