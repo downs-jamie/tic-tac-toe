@@ -1,0 +1,74 @@
+body{
+	background: url('blank-chalkboard-wallpaper.jpg') no-repeat center;
+	background-repeat: repeat;
+}
+
+
+
+h1{
+	color: orange;
+	font-size: 90px;
+}
+#A1{
+	border-left: none;
+	border-top: none;
+}
+#B1{
+	border-top: none;
+}
+#C1{
+	border-right: none;
+	border-top: none;
+}
+#A2{
+	border-left: none;
+}
+#C2{
+	border-right: none;
+}
+#A3{
+	border-left: none;
+	border-bottom: none;
+}
+#B3{
+	border-bottom: none;
+}
+#C3{
+	border-right: none;
+	border-bottom: none;
+}
+
+#board{
+	max-width: 640px;
+	min-width: 320px;
+	float: none; /* Override bootstrap */
+	margin: auto;
+}
+
+.square{
+	background-color: transparent;
+	border: 3px groove white;
+/*  	border-width: 2px;
+ 	border-style: solid;
+ 	border-color: black; */
+ 	outline: none; /* Keeps teh blue line from showing up on our squares */
+ 	width: 185px;
+ 	height: 185px;
+ 	font-size: 60px;
+ 	padding: -3px;
+ 	color: orange;
+}
+
+.square:hover{
+	background-color: 
+}
+
+#message{
+	font-size: 40px;
+	min-height: 80px;
+}
+
+.winning-square{
+	background-color: purple !important;
+	color: orange;
+}
